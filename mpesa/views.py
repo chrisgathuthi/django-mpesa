@@ -29,7 +29,7 @@ class MpesaExpressCallBack(View):
             MpesaExpress.objects.create(
                         amount = stk_results["Body"]["stkCallback"]["CallbackMetadata"]["Item"][0]["Value"],
                         receipt_no = stk_results["Body"]["stkCallback"]["CallbackMetadata"]["Item"][1]["Value"],
-                        transaction_date = datetime.strptime(stk_results["Body"]["stkCallback"]["CallbackMetadata"]["Item"][2]["Value"],"%Y%m%d%H%M%S"),
+                        transaction_date = datetime.strptime(str(stk_results["Body"]["stkCallback"]["CallbackMetadata"]["Item"][2]["Value"]),"%Y%m%d%H%M%S"),
                         phone = stk_results["Body"]["stkCallback"]["CallbackMetadata"]["Item"][3]["Value"]
                     )
         print(MpesaExpress.objects.last())
