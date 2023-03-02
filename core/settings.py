@@ -74,12 +74,30 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
+from urllib.parse import urlparse
+import os
+DATABASE_URL = os.getenv('DATABASE_URL', None)
+if not DATABASE_URL:
+    DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+else:
+    db = urlparse(DATABASE_URL)
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'db',
+            'USER': db.username,
+            'PASSWORD': db.password,
+            'HOST': db.hostname,
+            'PORT': db.port,
+            'OPTIONS': {'sslmode': 'require'},
+        }
+    }
+
 CSRF_TRUSTED_ORIGINS = ["https://sandbox.safaricom.co.ke"]
 
 # Password validation
