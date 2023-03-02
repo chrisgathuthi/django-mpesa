@@ -26,7 +26,7 @@ class MpesaExpressCallBack(View):
         if not stk_results["Body"]["stkCallback"]["ResultCode"] == 0:
             raise "Request cancelled by user "+stk_results["Body"]["stkCallback"]["ResultDesc"]
         else:
-            items = stk_results["Body"]["stkCallback"]["CallbackMetadata"]["CallbackMetadata"]["Item"] 
+            items = stk_results["Body"]["stkCallback"]["CallbackMetadata"]["Item"] 
             for i in range(len(items)):
                 for item in items:
                     print(item.items())
