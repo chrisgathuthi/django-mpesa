@@ -34,5 +34,6 @@ class MpesaExpressCallBack(View):
                     )
         print(MpesaExpress.objects.last())
         print(MpesaExpress.objects.first())
+        return HttpResponse("success")
         
 
