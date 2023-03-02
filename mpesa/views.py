@@ -26,15 +26,11 @@ class MpesaExpressCallBack(View):
         if not stk_results["Body"]["stkCallback"]["ResultCode"] == 0:
             raise "Request cancelled by user "+stk_results["Body"]["stkCallback"]["ResultDesc"]
         else:
-            items = stk_results["Body"]["stkCallback"]["CallbackMetadata"]["Item"] 
-            for i in range(len(items)):
-                for item in items:
-                    print(item.items())
-                    MpesaExpress.objects.create(
-                        amount = ["item"][0]["Value"],
-                        receipt_no = ["item"][1]["Value"],
-                        transaction_date = datetime.strptime(["item"][2]["Value"],"%Y%m%d%H%M%S"),
-                        phone = ["item"][3]["Value"]
+            MpesaExpress.objects.create(
+                        amount = stk_results["Body"]["stkCallback"]["CallbackMetadata"]["Item"][0]["Value"],
+                        receipt_no = stk_results["Body"]["stkCallback"]["CallbackMetadata"]["Item"][1]["Value"],
+                        transaction_date = datetime.strptime(stk_results["Body"]["stkCallback"]["CallbackMetadata"]["Item"][2]["Value"],"%Y%m%d%H%M%S"),
+                        phone = stk_results["Body"]["stkCallback"]["CallbackMetadata"]["Item"][3]["Value"]
                     )
         print(MpesaExpress.objects.last())
         print(MpesaExpress.objects.first())
