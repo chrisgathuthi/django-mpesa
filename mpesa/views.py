@@ -1,21 +1,34 @@
 import json
 from datetime import datetime
 
-from django.shortcuts import render, HttpResponse
+from django.urls import reverse
+from django.shortcuts import render, HttpResponse, redirect
 from django.views.generic.base import View
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
+from django.views.generic.edit import FormView
+from django.views.generic.base import TemplateView
 
-
-from .models import MpesaExpress
+from .models import MpesaExpress, ApiResponses
+from .forms import ExpressNumberForm
+from .transactions import mpesa_express
 
 # Create your views here.
 
-def index(request,*args, **kwargs):
-    return HttpResponse("hello world")
 
+class ExpressNumber(View):
+    def get(self, request, *args, **kwargs):
+        form = ExpressNumberForm()
+        return render(self.request,"express.html",context={"form":form})
+    
+    def post(self, request, *args, **kwargs):
+        form = ExpressNumberForm(request.POST)
+        if form.is_valid():
+            phone_num = form.cleaned_data["phone"]
+            print(phone_num)
+            # mpesa_express(phone_num,1)
+        else:
+            reverse("phone")
+        return render(self.request,"express_success.html")
 
-@method_decorator(csrf_exempt,name="dispatch")
 class MpesaExpressCallBack(View):
     """
 
@@ -23,8 +36,9 @@ class MpesaExpressCallBack(View):
     def post(self,request,*args, **kwargs):
         print(json.loads(request.body))
         stk_results = json.loads(request.body)
+        ApiResponses.objects.create(stk_results)
         if not stk_results["Body"]["stkCallback"]["ResultCode"] == 0:
-            raise "Request cancelled by user "+stk_results["Body"]["stkCallback"]["ResultDesc"]
+            pass
         else:
             MpesaExpress.objects.create(
                         amount = stk_results["Body"]["stkCallback"]["CallbackMetadata"]["Item"][0]["Value"],
@@ -33,7 +47,6 @@ class MpesaExpressCallBack(View):
                         phone = stk_results["Body"]["stkCallback"]["CallbackMetadata"]["Item"][3]["Value"]
                     )
         print(MpesaExpress.objects.last())
-        print(MpesaExpress.objects.first())
-        return HttpResponse("success")
+        return HttpResponse("")
         
 
