@@ -5,9 +5,15 @@ import base64
 
 from django.conf import settings
 
+class ExpressExceptions(Exception):
+    pass
 
 def mpesa_express(phone_no: int, amount: int, description="payment"):
     """Return a json object
+    args:
+      - phone_no:int
+      - amount: int
+      - descripint: string
 
     make a request to mpesa express api
     """
@@ -41,10 +47,18 @@ def mpesa_express(phone_no: int, amount: int, description="payment"):
     print(response.json())
     
     if 'errorCode' in  response.json():
-        raise "Tranasaction failed: "+response.json()["errorMessage"]
+        return "failed"
     else:
         print(response.json()["ResponseDescription"])
-    return None
+        return "success"
+    # return None
+    # try:
+    #     if 'errorCode' in  response.json():
+    #         raise ExpressExceptions("Tranasaction failed, invalid access tokens")
+    # except ExpressExceptions:
+    #     pass
+    # finally:
+    #     return None
 
 
 # mpesa_express(254757164343, 1)

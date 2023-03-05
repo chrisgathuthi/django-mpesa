@@ -9,7 +9,8 @@ from django.views.generic.base import TemplateView
 
 from .models import MpesaExpress, ApiResponses
 from .forms import ExpressNumberForm
-from .transactions import mpesa_express
+from .transactions import mpesa_express, ExpressExceptions
+from .tasks import get_details
 
 # Create your views here.
 
@@ -24,7 +25,13 @@ class ExpressNumber(View):
         if form.is_valid():
             phone_num = form.cleaned_data["phone"]
             print(phone_num)
-            # mpesa_express(phone_num,1)
+            # status =  mpesa_express(phone_num,1)
+            # if status == "success":
+            #     data = get_details(phone_num)
+            #     data.is_confirmed = True
+            #     data.save()
+            # else:
+            #     raise ExpressExceptions("failed, invalid access tokens")
         else:
             reverse("phone")
         return render(self.request,"express_success.html")

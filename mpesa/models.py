@@ -7,6 +7,7 @@ class MpesaExpress(models.Model):
     receipt_no = models.CharField(max_length=10,verbose_name="MpesaReceiptNumber")
     transaction_date = models.DateTimeField(verbose_name="TransactionDate")
     phone = models.PositiveBigIntegerField(verbose_name="PhoneNumber")
+    is_confirmed = models.BooleanField(verbose_name="confirmed",default=False)
     timestamp = models.DateTimeField(auto_now=True)
 
 def dict_instance():
