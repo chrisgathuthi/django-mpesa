@@ -11,9 +11,9 @@ class ExpressExceptions(Exception):
 def mpesa_express(phone_no: int, amount: int, description="payment"):
     """Return a json object
     args:
-      - phone_no:int
-      - amount: int
-      - descripint: string
+      :phone_no:int
+      :amount: int
+      :description: string
 
     make a request to mpesa express api
     """
@@ -38,7 +38,7 @@ def mpesa_express(phone_no: int, amount: int, description="payment"):
         "AccountReference": settings.ACCOUNT_REFERENCE[:12],
         "TransactionDesc": description[:13],
     }
-    header = {"Authorization": "Bearer  ATEAa2TnjTvC988NbznxqaLRVIvM","Content-Type": "application/json"}
+    header = {"Authorization": "Bearer 5Fwz2gaTqE1XtJZSAB9AoORZ0yLm","Content-Type": "application/json"}
     response = requests.post(
         "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest",
         headers=header,
@@ -47,7 +47,7 @@ def mpesa_express(phone_no: int, amount: int, description="payment"):
     print(response.json())
     
     if 'errorCode' in  response.json():
-        return "failed"
+        raise ExpressExceptions("Invalid access token, use a valid access token")
     else:
         print(response.json()["ResponseDescription"])
         return "success"
