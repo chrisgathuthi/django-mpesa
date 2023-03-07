@@ -1,5 +1,7 @@
 from django.urls import path
-from .views import index
+from .views import  ExpressNumber
+
+
 urlpatterns = [
-    path("",index,name="index")
+    path("",ExpressNumber.as_view(),name="phone"),
 ]
