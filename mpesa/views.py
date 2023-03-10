@@ -8,9 +8,9 @@ from django.views.generic.edit import FormView
 from django.views.generic.base import TemplateView
 from django.http import JsonResponse
 
-from .models import MpesaExpress, ApiResponses
+from .models import MpesaExpress, ApiResponses,LipaNaMpesa
 from .forms import ExpressNumberForm
-from .transactions import mpesa_express, ExpressExceptions
+from .transactions import mpesa_express
 from .tasks import get_express_payement
 
 # Create your views here.
@@ -72,7 +72,18 @@ class ValidationView(View):
 class ConfirmationView(View):
     """C2B validation view, return nothing"""
     def post(self,request, *args, **kwarg):
-        partner_resp = json.loads(request.body)
-        ApiResponses.objects.create(partner_resp)
+        resp = json.loads(request.body)
+        ApiResponses.objects.create(resp)
+        LipaNaMpesa.objects.create(
+            type = resp["TransactionType"],
+            receipt_no = resp["TransID"],
+            transaction_date = datetime.strptime(resp["TransTime"],"%Y%m%d%H%M%S"),
+            amount = resp["TransAmount"],
+            ref_no = resp["BillRefNumber"],
+            invoice_no = resp["InvoiceNumber"],
+            acc_balance = resp["OrgAccountBalance"],
+            third_party = resp["ThirdPartyTransID"],
+            phone = resp["MSISDN"],
+            first_name = resp["FirstName"]
+        )
         return HttpResponse("")
-        
