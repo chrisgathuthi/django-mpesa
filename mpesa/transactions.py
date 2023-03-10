@@ -62,3 +62,27 @@ def mpesa_express(phone_no: int, amount: int, description="payment"):
 
 
 # mpesa_express(254757164343, 1)
+
+def customer_to_business(type:str,phone:int,amount:int,account_number=None):
+    if account_number == None:
+        account_number = ""
+    
+    headers = {
+  'Content-Type': 'application/json',
+  'Authorization': 'Bearer A1pviNAIhlXSzBZJ6G1hADIAV66m'}
+
+    payload = {
+    "ShortCode": 600426,#change to use the settings in production
+    "CommandID": type,
+    "amount": amount,
+    "MSISDN": phone,
+    "BillRefNumber": account_number,}
+
+    response = requests.post('https://sandbox.safaricom.co.ke/mpesa/c2b/v1/simulate', headers = headers, json = payload)
+    print(response.text.encode('utf8'))
+    if response.json()["ResponseCode"] == str(0):
+        return "sucessful"
+    else:
+        return "failed"
+
+    
