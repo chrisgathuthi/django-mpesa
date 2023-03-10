@@ -8,7 +8,7 @@ It has all mpesa endpoint that has the latest changes to the mpesa api endpoint 
 Type the command below to install the package in your environemnt variable
 
 ```python
-python -m pip install django-mpesa
+python -m pip install django-mpesa-pay
 ```
 
 In your django project in your <b>INSTALLED_APPS</b> add the following

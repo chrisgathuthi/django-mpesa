@@ -15,10 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from mpesa.views import MpesaExpressCallBack
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("",include("mpesa.urls")),
-    path('stk-callback/', MpesaExpressCallBack.as_view(),name="express-callback"),
+    path("mpesa/",include("mpesa.urls")),
 ]

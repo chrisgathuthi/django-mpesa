@@ -10,4 +10,5 @@ class ExpressNumberForm(forms.Form):
         initial=254,
         help_text="your mpesa registerd phone number",
     )
-    amount = forms.IntegerField()
+    amount = forms.IntegerField( widget=forms.TextInput(attrs={'name': 'amount'}),
+        label="Amount",initial=1)
