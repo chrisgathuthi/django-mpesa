@@ -6,6 +6,7 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.views.generic.base import View
 from django.views.generic.edit import FormView
 from django.views.generic.base import TemplateView
+from django.http import JsonResponse
 
 from .models import MpesaExpress, ApiResponses
 from .forms import ExpressNumberForm
@@ -62,4 +63,16 @@ class MpesaExpressCallBack(View):
         print(MpesaExpress.objects.last())
         return HttpResponse("")
         
+class ValidationView(View):
+    """C2B validation view, return accecepted"""
+    def post(self,request,*args,**kwargs):
+        print(json.loads(request.body))
+        return JsonResponse({"ResultCode": 0,"ResultDesc": "Accepted"})
 
+class ConfirmationView(View):
+    """C2B validation view, return nothing"""
+    def post(self,request, *args, **kwarg):
+        partner_resp = json.loads(request.body)
+        ApiResponses.objects.create(partner_resp)
+        return HttpResponse("")
+        
