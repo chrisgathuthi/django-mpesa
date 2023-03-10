@@ -34,7 +34,7 @@ def mpesa_express(phone_no: int, amount: int, description="payment"):
         "PartyA": phone_no,
         "PartyB": short_code,
         "PhoneNumber": phone_no,
-        "CallBackURL": "https://squid-app-9xncj.ondigitalocean.app/stk-callback/",
+        "CallBackURL": "https://squid-app-9xncj.ondigitalocean.app/mpesa/stk-callback/",
         "AccountReference": settings.ACCOUNT_REFERENCE[:12],
         "TransactionDesc": description[:13],
     }
