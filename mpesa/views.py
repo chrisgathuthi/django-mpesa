@@ -32,10 +32,10 @@ class ExpressNumber(View):
             amount = form.cleaned_data["amount"]
             status =  mpesa_express(phone_num,1)
             if status == "success":
-                # data = get_express_payement.delay(phone_num,amount)
-                # print(data)
-                # data.is_confirmed = True
-                # data.save()
+                result = get_express_payement.delay(phone_num,amount)
+                result = result.get()
+                result.is_confirmed = True
+                result.save()
                 return render(self.request,"express_success.html")
         else:
             # redirect(reverse("phone"))

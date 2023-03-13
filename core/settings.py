@@ -150,9 +150,7 @@ PASS_KEY = config("PASS_KEY")
 ACCOUNT_REFERENCE = "SOVEREIGN"#NAME OF YOUR BUSINESS
 BUSINESS_SHORT_CODE = 174379 #PAYBILL OR TILL NO
 
-# VALIDATION_URL = "https://squid-app-9xncj.ondigitalocean.app/payments/validation-callback/"
-# CONFIRMATION_URL = "https://squid-app-9xncj.ondigitalocean.app/payments/confirmation-callback/"
-# RESPONSE_TYPE = "Completed"
+
 #CELERY
 CELERY_BROKER_URL = "redis://localhost:6379"
 CELERY_RESULT_BACKEND = "django-db"
