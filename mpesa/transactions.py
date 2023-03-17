@@ -4,9 +4,7 @@ import datetime
 import base64
 
 from django.conf import settings
-
-class ExpressExceptions(Exception):
-    pass
+from .transaction_exceptions import ExpressExceptions
 
 def mpesa_express(phone_no: int, amount: int, description="payment"):
     """Return a json object
@@ -17,11 +15,9 @@ def mpesa_express(phone_no: int, amount: int, description="payment"):
 
     make a request to mpesa express api
     """
-    pass_key = settings.PASS_KEY
-    short_code = settings.BUSINESS_SHORT_CODE
 
     timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-    password = str(short_code) + pass_key + timestamp
+    password = str(settings.BUSINESS_SHORT_CODE) + settings.PASS_KEY + timestamp
     byte_password = password.encode()
     new_password = base64.b64encode(byte_password)
     new_password = new_password.decode()
@@ -32,13 +28,13 @@ def mpesa_express(phone_no: int, amount: int, description="payment"):
         "TransactionType": "CustomerPayBillOnline",
         "Amount": amount,
         "PartyA": phone_no,
-        "PartyB": short_code,
+        "PartyB": settings.BUSINESS_SHORT_CODE,
         "PhoneNumber": phone_no,
         "CallBackURL": "https://squid-app-9xncj.ondigitalocean.app/mpesa/stk-callback/",
         "AccountReference": settings.ACCOUNT_REFERENCE[:12],
         "TransactionDesc": description[:13],
     }
-    header = {"Authorization": "Bearer 5Fwz2gaTqE1XtJZSAB9AoORZ0yLm","Content-Type": "application/json"}
+    header = {"Authorization": f"Bearer {settings.ACCESS_TOKEN}","Content-Type": "application/json"}
     response = requests.post(
         "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest",
         headers=header,
@@ -51,7 +47,6 @@ def mpesa_express(phone_no: int, amount: int, description="payment"):
     else:
         print(response.json()["ResponseDescription"])
         return "success"
-    # return None
     # try:
     #     if 'errorCode' in  response.json():
     #         raise ExpressExceptions("Tranasaction failed, invalid access tokens")
@@ -69,7 +64,7 @@ def customer_to_business(type:str,phone:int,amount:int,account_number=None):
     
     headers = {
   'Content-Type': 'application/json',
-  'Authorization': 'Bearer A1pviNAIhlXSzBZJ6G1hADIAV66m'}
+  'Authorization': f"Bearer {settings.ACCESS_TOKEN}"}
 
     payload = {
     "ShortCode": 600426,#change to use the settings in production

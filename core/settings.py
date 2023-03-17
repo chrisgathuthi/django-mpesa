@@ -146,6 +146,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Mpesa credentials
 # Keep them in an evironemnt variables in production
 
+ACCESS_TOKEN = config("ACCESS_TOKEN")
 PASS_KEY = config("PASS_KEY")
 ACCOUNT_REFERENCE = "SOVEREIGN"#NAME OF YOUR BUSINESS
 BUSINESS_SHORT_CODE = 174379 #PAYBILL OR TILL NO
